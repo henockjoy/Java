@@ -1,157 +1,141 @@
+/*Java Program to Demonstrate a Basic Calculator using Applet*/
 import java.awt.*;
+import java.applet.*;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-class Calculator extends JFrame {
-private final Font BIGGER_FONT=new Font("monospaced",Font.PLAIN,20);
-private JTextField textfield;
-private Boolean number=true;
-private String equalOp="=";
-private CalculatorOp op=new CalculatorOp();
-public Calculator() {
-textfield=new JTextField("",12);
-textfield.setHorizontalAlignment(JTextField.RIGHT);
-textfield.setFont(BIGGER_FONT);
-ActionListener numberListener = new NumberListener();
-String buttonOrder="1234567890 ";
-JPanel buttonPanel=new JPanel();
-buttonPanel.setLayout(new GridLayout(4, 4, 4, 4));
-for(int i=0; i<buttonOrder.length(); i++) {
-String key=buttonOrder.substring(i,i+1);
-if(key.equals(" ")) {
-buttonPanel.add(new JLabel(""));
-} else {
-JButton button=new JButton(key);
-button.addActionListener(numberListener);
-button.setFont(BIGGER_FONT);
-buttonPanel.add(button);
-}
-}
-ActionListener operatorListener=new OperatorListener();
-JPanel panel=new JPanel();
-panel.setLayout(new GridLayout(4, 4, 4, 4));
-String[] opOrder={"+","-","*","/","=","C","sin","cos","log"};
-for(int i=0;i<opOrder.length;i++){
-JButton button=new JButton(opOrder[i]);
-button.addActionListener(operatorListener);
-button.setFont(BIGGER_FONT);
-panel.add(button);
-}
-JPanel pan=new JPanel();
-pan.setLayout(new BorderLayout(4, 4));
-pan.add(textfield,BorderLayout.NORTH);
-pan.add(buttonPanel,BorderLayout.CENTER);
-pan.add(panel,BorderLayout.EAST);
-this.setContentPane(pan);
-this.pack();
-this.setTitle("Calculator");
-this.setResizable(false);
-}
-private void action() {
-number=true;
-textfield.setText("");
-equalOp="=";
-op.setTotal("");
-}
-class OperatorListener implements ActionListener {
-public void actionPerformed(ActionEvent e) {
-String displayText=textfield.getText();
-if(e.getActionCommand().equals("sin"))
+public class Calculator extends Applet implements ActionListener
 {
-textfield.setText("" + Math.sin(Double.valueOf(displayText).doubleValue()));
-} else
-if(e.getActionCommand().equals("cos"))
-{
-textfield.setText("" + Math.cos(Double.valueOf(displayText).doubleValue()));
+    TextField inp;
+    //Function to add features to the frame
+    public void init()
+    {
+	setBackground(Color.white);
+	setLayout(null);
+	int i;
+	inp = new TextField();
+	inp.setBounds(150,100,270,50);
+	this.add(inp);
+	Button button[] = new Button[10];
+	for(i=0;i<10;i++)
+	{
+	    button[i] = new Button(String.valueOf(9-i));
+	    button[i].setBounds(150+((i%3)*50),150+((i/3)*50),50,50);
+	    this.add(button[i]);
+	    button[i].addActionListener(this);
+	}
+	Button dec=new Button(".");
+	dec.setBounds(200,300,50,50);
+	this.add(dec);
+	dec.addActionListener(this);
+ 
+	Button clr=new Button("C");
+	clr.setBounds(250,300,50,50);
+	this.add(clr);
+	clr.addActionListener(this);
+ 
+	Button operator[] = new Button[5];
+	operator[0]=new Button("/");
+	operator[1]=new Button("*");
+	operator[2]=new Button("-");
+	operator[3]=new Button("+");
+	operator[4]=new Button("=");
+	for(i=0;i<4;i++)
+	{
+	    operator[i].setBounds(300,150+(i*50),50,50);
+	    this.add(operator[i]);
+	    operator[i].addActionListener(this);
+	}
+	operator[4].setBounds(350,300,70,50);
+	this.add(operator[4]);
+	operator[4].addActionListener(this);
+    }
+    String num1="";
+    String op="";
+    String num2="";
+    //Function to calculate the expression
+    public void actionPerformed(ActionEvent e)
+    {
+	String button = e.getActionCommand();
+        char ch = button.charAt(0);
+	if(ch>='0' && ch<='9'|| ch=='.') 
+	{ 
+	    if (!op.equals("")) 
+		num2 = num2 + button; 
+	    else
+		num1 = num1 + button;   
+	    inp.setText(num1+op+num2); 
+	} 
+	else if(ch=='C') 
+	{ 
+	    num1 = op = num2 = ""; 
+	    inp.setText(""); 
+	}
+	else if (ch =='=') 
+	{ 
+	    if(!num1.equals("") && !num2.equals(""))
+	    {
+		double temp;
+		double n1=Double.parseDouble(num1);
+		double n2=Double.parseDouble(num2);
+		if(n2==0 && op.equals("/"))
+		{
+		    inp.setText(num1+op+num2+" = Zero Division Error");
+		    num1 = op = num2 = "";
+		}
+		else
+		{
+		    if (op.equals("+")) 
+		        temp = n1 + n2; 
+		    else if (op.equals("-")) 
+		        temp = n1 - n2; 
+		    else if (op.equals("/")) 
+	  	        temp = n1/n2; 
+		    else
+		        temp = n1*n2; 
+		    inp.setText(num1+op+num2+" = "+temp); 
+		    num1 = Double.toString(temp);
+		    op = num2 = ""; 
+	        }
+            }
+	    else
+	    {
+		num1 = op = num2 = ""; 
+		inp.setText("");
+	    }
+        } 
+	else 
+	{ 
+	    if (op.equals("") || num2.equals("")) 
+		op = button; 
+	    else 
+	    { 
+		double temp;
+		double n1=Double.parseDouble(num1);
+		double n2=Double.parseDouble(num2);
+		if(n2==0 && op.equals("/"))
+		{
+		    inp.setText(num1+op+num2+" = Zero Division Error");
+		    num1 = op = num2 = "";
+		}
+		else
+		{
+		    if (op.equals("+")) 
+		        temp = n1 + n2; 
+		    else if (op.equals("-")) 
+		        temp = n1 - n2; 
+		    else if (op.equals("/")) 
+	  	        temp = n1/n2; 
+		    else
+		        temp = n1*n2; 
+		    num1 = Double.toString(temp); 
+		    op = button; 
+		    num2 = ""; 
+	        }
+            }
+	    inp.setText(num1+op+num2);
+        }
+    }
 }
-else
-if(e.getActionCommand().equals("log"))
-{
-textfield.setText("" + Math.log(Double.valueOf(displayText).doubleValue()));
-}
-else if(e.getActionCommand().equals("C"))
-{
-textfield.setText("");
-}
-else
-{
-if(number)
-{
-action();
-textfield.setText("");
-}
-else
-{
-number=true;
-if(equalOp.equals("="))
-{
-op.setTotal(displayText);
-} else
-if(equalOp.equals("+"))
-{
-op.add(displayText);
-} 
-else if(equalOp.equals("-"))
-{
-op.subtract(displayText);
-} 
-else if(equalOp.equals("*"))
-{
-op.multiply(displayText);
-} 
-else if(equalOp.equals("/"))
-{
-op.divide(displayText);
-} 
-textfieldsetText("" + op.getTotalString());
-equalOp = e.getActionCommand();
-}
-}
-}
-}
-class NumberListener implements ActionListener {
-public void actionPeformed(ActionEvent event) {
-String digit=event.getActioncommand();
-if(number) {
-textfield.setText(digit);
-number=false;
-} else {
-textfield.setText(textfield.getText() + digit);
-}
-}
-}
-public class CalculatorOp {
-private int total;
-public CalculatorOp() {
-total=0;
-}
-public String getTotalString() {
-return ""+total;
-}
-public void setTotal(String n){
-total=convertToNumber(n);
-}
-public void add(String n){
-total+=convertToNumber(n);
-}
-public void subtact(String n){
-total-=convertToNumber(n);
-}
-public void multiply(String n){
-total*=convertToNumber(n);
-}
-public void divide(String n){
-total/=convertToNumber(n);
-}
-private int convertToNumber(String n){
-return Integer.parseInt(n);
-}
-}
-}
-class calc{
-public static void main(String[] args){
-JFrame frame=new Calculator();
-frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-frame.setVisible(true);
-}
-}
+/*
+<applet code = Calculator.class width=600 height=600>
+</applet>
+*/
