@@ -1,4 +1,4 @@
-<h1 align="center">Calculator in Java (AppletViewer)</h1>h1> 
+<h1 align="center">Calculator in Java (AppletViewer)</h1> 
 
 
 
