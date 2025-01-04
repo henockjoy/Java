@@ -1,6 +1,6 @@
 <h1 align="center">Calculator in Java (AppletViewer)</h1> 
 
-
+<h1 align="center"><img src="https://github.com/henockjoy/Java/blob/main/Calculator.png" alt="logo" target="/blank"></h1>
 
 This project is a **Calculator Application** built using **Java AppletViewer**. It provides a simple graphical interface for performing basic arithmetic operations such as addition, subtraction, multiplication, and division.  
 
